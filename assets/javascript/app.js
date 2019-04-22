@@ -9,10 +9,11 @@ var currentanswer;
 var correctanswer;
 var isquestion;
 var intervalId;
+var timesup;
 
 // prevents the clock from being sped up unnecessarily
 var clockRunning = false;
-var time = 20;
+var time = 10;
 
 // TODO: Put links to our images in this image array.
 var imagespath="assets/images/";
@@ -68,17 +69,25 @@ console.log("correctans"+correctanswer);
 }
 
 
-function nextquestion() {
+function nextquestion(timesup) {
   clearInterval(intervalId);
   i++;
   console.log("insidenextImage");
   console.log(imagespath+imagesblur[i]);
+
   displayImage(true);
   $(".answers").css("background-color","unset");
   displayOptions();
   time=10;
+  if(timesup===true)
+  {
+    wrongs++;
+    $(".wrong-answers").text(wrongs);
+
+  }
+ 
   intervalId = setInterval(function(){count()}, 1000);
-  showImage =  setTimeout(function() {nextquestion()
+  showImage =  setTimeout(function() {nextquestion(true)
   }, 10000);
 
 
@@ -107,7 +116,7 @@ function updatescore(correct,wrong,timer)
 {
   $(".correct-answers").text(correct);
   $(".wrong-answers").text(wrong);
-  $("#timer").text("20");
+  $("#timer").text("10");
 }
 
 
@@ -124,13 +133,16 @@ function stopTrivia() {
 
 function startGame()
 {
+
 i=-1;
 isquestion=true;
   $(".correct-answers").text("0");
   $(".wrong-answers").text("0");
-  $("#timer").text("20");
+  $("#timer").text("10");
+
+
   // showImage = setInterval(nextquestion, 20000);
-  nextquestion();
+  nextquestion(false);
 
 
   // TODO: Use showImage to hold the setInterval to run nextImage.
@@ -173,7 +185,7 @@ function checkanswer(answer,ansid)
   updatescore(corrects,wrongs,timer);
 
   setTimeout(function() {
-   nextquestion();
+   nextquestion(false);
 }, 2000);
 
   //showImage = setInterval(nextImage, 3000);
@@ -187,7 +199,7 @@ function checkanswer(answer,ansid)
 
     updatescore(corrects,wrongs,timer);
     setTimeout(function() {
-      nextquestion();
+      nextquestion(false);
   }, 2000);
     // setTimeout(nextquestion(), 5000);
    // showImage = setInterval(nextImage, 3000);
